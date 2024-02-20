@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "outDir": "./dist",
+    "typeRoots": [
+      "./node_modules/@types",
+      "./node_modules/sites-types"
+      // "./types"
+    ]
+  },
+  "include": [
+    "./src"
+    // , "./types"
+  ],
+  "exclude": ["node_modules"]
+}
