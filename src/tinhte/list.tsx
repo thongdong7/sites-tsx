@@ -15,7 +15,7 @@ const list: Page = {
         url: [$value.links.permalink],
         image: [$value.thread_image.link],
         created_at: [$value.thread_create_date, date1000()],
-        summary: [$value.first_post.post_body_plain_text, split("\n"), first()],
+        summary: [$value.first_post.post_body_plain_text, split("\n"), first(), truncate_word(200)],
         author: [
           pick({
             name: [$value.creator_username],

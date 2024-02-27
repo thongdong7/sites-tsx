@@ -1,0 +1,37 @@
+page list
+patterns = [
+  "^https://api\.bachngocsach\.vip/api/story/\d+/chapter"
+]
+example = "https://api.bachngocsach.vip/api/story/742/chapter?per_page=50&page=1&order_by=asc"
+
+transforms [
+  context.source
+  download(type="json")
+  pick({
+    links = [
+      template([
+        {
+          text = "Trang kế"
+          url  = value.chapters.next_page_url
+        }
+        {
+          text = value.chapters.last_page
+          url  = value.chapters.last_page_url
+        }
+        {
+          text = value.chapters.from
+          url  = value.chapters.first_page_url
+        }
+      ])
+      filter(value.url != null)
+      uniq_by_field("url")
+    ]
+    items = [
+      value.chapters.data
+      map(pick({
+        title = value.name
+        url   = "https://bachngocsach.vip/dich/pham-nhan-tien-gioi-thien-pntt-2/" + value.story_id + "/" + value.slug + "/" + value.id + ".html"
+      }))
+    ]
+  })
+]

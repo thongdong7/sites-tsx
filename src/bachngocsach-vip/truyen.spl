@@ -1,0 +1,135 @@
+page list
+patterns = [
+  "https://bachngocsach\.vip/truyen/[a-z0-9\-]+/\d+\.html?$"
+]
+example = "https://bachngocsach.vip/truyen/pham-nhan-tien-gioi-thien-pntt-2/61.html"
+search = {
+  url   = "https://bachngocsach.vip/search"
+  field = "ten"
+}
+
+script latest [
+  "https://api.bachngocsach.vip/api/story/" + var.id + "/5-chapters-newest"
+  download(type="json")
+  value.data
+  pick({
+    title = "Chương mới"
+    items = map(pick({
+      title = value.name
+      url   = [
+        "https://bachngocsach.vip/dich/" + var.story.slug + "/" + var.story.id + "/" + value.slug + "/" + value.id + ".html"
+      ]
+    }))
+  })
+]
+
+script categories [
+  var.story.categories
+  categories = map(pick({
+    text = value.name
+    url  = [
+      "https://bachngocsach.vip/the-loai/" + value.slug + "/" + value.id + ".html"
+    ]
+  }))
+]
+
+script tags [
+  var.story.tags
+  tags = map(pick({
+    text = value.name
+    url  = [
+      "https://bachngocsach.vip/tag/" + value.slug + "/" + value.id + ".html"
+    ]
+  }))
+]
+
+transforms [
+  context.source
+  replace(pattern="^.+/(\d+).html$",replacement="$1")
+  id = value
+  "https://api.bachngocsach.vip/api/story/" + var.id
+  download(type="json")
+  story = value
+  script("categories")
+  script("tags")
+  var.story
+  pick({
+    title      = value.name
+    image      = value.cover
+    intro      = value.desc
+    author     = pick({
+      name = value.author.name
+      url  = [
+        "https://bachngocsach.vip/tac-gia/" + get("value.author.slug") + "/" + get("value.author.id") + ".html"
+      ]
+    })
+    tags       = [
+      concat(var.categories, var.tags)
+    ]
+    links      = template([
+      {
+        text = "Danh sách chương"
+        url  = "https://api.bachngocsach.vip/api/story/" + var.id + "/chapter?per_page=50&page=1&order_by=asc"
+      }
+    ])
+    categories = pick_list(script("latest"))
+  })
+  
+  # html_node
+  # pick({
+  #   title        = html_select("#truyen-title@text")
+  #   image        = html_select("#anhbia img@src")
+  #   author       = pick({
+  #     name = [
+  #       html_select("#tacgia a@text")
+  #     ]
+  #     url  = [
+  #       html_select("#tacgia a@href")
+  #       url
+  #     ]
+  #   })
+  #   header_links = pick_list(pick({
+  #     text = "Bạch Ngọc Sách"
+  #     url  = [
+  #       html_select("#header a@href")
+  #       url
+  #     ]
+  #   }))
+  #   tags         = [
+  #     html_select_all(".flag-term")
+  #     map(pick({text=html_get_attr("@text")}))
+  #   ]
+  #   links        = [
+  #     html_select_all("#truyen-nav a")
+  #     map(pick({
+  #       text = html_get_attr("@text")
+  #       url  = [
+  #         html_get_attr("href")
+  #         replace(pattern="#.*$",replacement="")
+  #       ]
+  #     }))
+  #     filter(get("value.url") != "")
+  #   ]
+  #   intro        = html_select(".block-content@html")
+  #   types        = [
+  #     html_select_all("#theloai a")
+  #     map(pick({
+  #       name = [
+  #         html_get_attr("@text")
+  #       ]
+  #       url  = [
+  #         html_get_attr("href")
+  #         url
+  #       ]
+  #     }))
+  #   ]
+  #   categories   = pick_list([
+  #     [
+  #       script("latest")
+  #     ]
+  #     [
+  #       script("mucluc")
+  #     ]
+  #   ])
+  # })
+]
