@@ -9,7 +9,7 @@ const view: Page = {
     pick({
       title: [html_select("h1.title-detail@text")],
       summary: [html_select(".description@html")],
-      content: [html_select(".fck_detail@html")],
+      content: [html_select(".fck_detail@html"), html_safe()],
     }),
   ],
 };

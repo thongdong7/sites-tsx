@@ -4,14 +4,14 @@ const view: Page = {
     "^https://tuoitre.vn/.+-[\\d]+.htm$",
   ],
   example:
-    "https://thanhnien.vn/sinh-vien-viet-nam-tai-han-quoc-chu-trong-nghien-cuu-khoa-hoc-185230415152639264.htm",
+    "https://tuoitre.vn/dai-hoc-quoc-gia-tp-hcm-can-tuyen-65-nha-khoa-hoc-tre-xuat-sac-20240228091914819.htm",
 
   transforms: [
     html_node(),
     pick({
       title: [html_select("[data-role=title]@text")],
       summary: [html_select(".detail-sapo@text")],
-      content: [html_select("div.detail-cmain@html")],
+      content: [html_select("div.detail-cmain@html"), html_safe()],
     }),
   ],
 };
