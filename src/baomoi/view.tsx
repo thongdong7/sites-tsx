@@ -1,5 +1,8 @@
 const view: Page = {
-  patterns: ["^https://baomoi.com/.+/c/?[\\d]+\\.epi$"],
+  patterns: [
+    "^https://baomoi.com/.+/c/[\\d]+\\.epi$",
+    "^https://baomoi.com/.+-c[\\d]+\\.epi$",
+  ],
   example: "https://baomoi.com/nhung-khu-pho-khong-co-rac/c/45826011.epi",
 
   transforms: [
