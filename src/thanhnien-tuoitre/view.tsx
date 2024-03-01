@@ -11,7 +11,7 @@ const view: Page = {
     pick({
       title: [html_select("[data-role=title]@text")],
       summary: [html_select(".detail-sapo@text")],
-      content: [html_select("div.detail-cmain@html"), html_safe()],
+      content: [html_select("div.detail-cmain@html"), html_url(), html_safe()],
     }),
   ],
 };
