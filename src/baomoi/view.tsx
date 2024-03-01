@@ -27,6 +27,7 @@ const view: Page = {
         ),
         filter($value != ""),
         join("\n"),
+        html_safe(),
       ],
     }),
   ],
