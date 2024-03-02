@@ -1,7 +1,7 @@
 const view: Page = {
   patterns: ["^https://vnexpress.net/.+-[\\d]+.html$"],
   example:
-    "https://vnexpress.net/nha-o-xa-hoi-chiec-phao-cua-doanh-nghiep-bat-dong-san-4589120.html",
+    "https://vnexpress.net/chieu-lua-chuyen-tien-trung-ten-tai-khoan-4716884.html",
 
   transforms: [
     html_node(),
@@ -9,7 +9,7 @@ const view: Page = {
     pick({
       title: [html_select("h1.title-detail@text")],
       summary: [html_select(".description@html")],
-      content: [html_select(".fck_detail@html"), html_safe()],
+      content: [html_select(".fck_detail,.audioContainter@html"), html_for_view()],
     }),
   ],
 };
